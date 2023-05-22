@@ -8,7 +8,7 @@ class="el-menu-vertical-demo"
 router  
 :collapse="collapse"
 > 
-<!-- router:是否启用 vue-router 模式。 启用该模式会在激活导航时以 index 作为 path 进行路由跳转 -->
+<!-- router:是否启用 vue-router 模式。 用该模式会在激活导航时以 index 作为 path 进行路由跳转 -->
 
 <el-menu-item index="/dashboard">
       <el-icon><Menu></Menu></el-icon>
