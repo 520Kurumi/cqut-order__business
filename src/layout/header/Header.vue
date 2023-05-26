@@ -1,13 +1,15 @@
 <template>
     <div class="left-header">
      <Collapse></Collapse>
+     <BC></BC>
     </div>
       <LoginOut></LoginOut>   
 </template>
 
-<script setup lang="ts">
+<script setup>
   import Collapse from './Collapse.vue'
   import LoginOut from './LoginOut.vue'
+   import BC from './BredCrumb.vue'
 </script>
 
 <style lang="scss" scoped>

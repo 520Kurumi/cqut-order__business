@@ -10,37 +10,58 @@ const routes: Array<RouteRecordRaw> = [
         {
             path:'/dashboard',
             name:'dashboard',
-            component:()=>import('@/views/dashboard/Index.vue')
+            component:()=>import('@/views/dashboard/Index.vue'),
+            meta:{
+                title:'首页'
+            }
         },
         {
             path: '/banner',
             name: 'banner',
-            component: () => import('@/views/banner/Index.vue')
+            component: () => import('@/views/banner/Index.vue'),
+            meta:{
+                title:'广告管理'
+            }
         },
         {
             path: '/category',
             name: 'category',
-            component: () => import('@/views/category/Index.vue')
+            component: () => import('@/views/category/Index.vue'),
+            meta:{
+                title:'菜品分类'
+            }
         },
         {
             path: '/comment',
             name: 'comment',
-            component: () => import('@/views/comment/Index.vue')
+            component: () => import('@/views/comment/Index.vue'),
+            meta:{
+                title:'评论管理'
+            }
         },
         {
             path: '/goods',
             name: 'goods',
-            component: () => import('@/views/goods/Index.vue')
+            component: () => import('@/views/goods/Index.vue'),
+            meta:{
+                title:'菜品管理'
+            }
         },
         {
             path: '/order',
             name: 'order',
-            component: () => import('@/views/order/Index.vue')
+            component: () => import('@/views/order/Index.vue'),
+            meta:{
+                title:'订单管理'
+            }
         },
         {
             path: '/user',
             name: 'user',
-            component: () => import('@/views/user/Index.vue')
+            component: () => import('@/views/user/Index.vue'),
+            meta:{
+                title:'用户管理'
+            }
         }
         ]
 }

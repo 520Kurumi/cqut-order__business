@@ -11,7 +11,7 @@
     import {computed} from 'vue'
 
   const store=collapseStore()  //获取store
-  const status=computed(()=>{  //获取状态,初始化 只执行一次
+  const status=computed(()=>{  //获取状态,初始化 
     return store.getCollapse
   })
 

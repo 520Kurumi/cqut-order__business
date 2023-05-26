@@ -1,7 +1,7 @@
 <template>
     <div class="logo">
         <img :src="MenuLogo" alt="logo" />
-       <span class="logo-title" v-if="collapse">{{ title }}</span>
+       <span class="logo-title" v-if="show">{{ title }}</span>
 </div>
 </template>
 
@@ -9,11 +9,24 @@
     import MenuLogo from '@/assets/MenuLogo.png'
     const title='校园点餐系统'
   import {collapseStore} from '@/store/collapse/index' //获取store
-  import {computed} from 'vue'
+import { watch } from 'vue'
+  // import {computed} from 'vue'
   const store=collapseStore()
-  const collapse=computed(()=>{
-    return !store.getCollapse
-  })
+  // const collapse=computed(()=>{
+  //   return !store.getCollapse
+  // })
+
+  let show=true;
+
+  watch(
+ ()=>store.getCollapse,
+ ()=>{
+   setTimeout(() => {
+       show=!show
+   }, 300);
+ }
+);
+
 </script>
 
 <style lang="scss" scoped>

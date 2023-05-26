@@ -52,7 +52,7 @@ router
 <script setup lang="ts">
   import {  Menu, Memo, Monitor, Calendar, Edit } from "@element-plus/icons-vue";
   import MenuLogo from '@/layout/MenuLogo.vue'
-  import {computed} from 'vue' //导入计算属性，页面初始化时： 会执行一次computed
+  import {computed} from 'vue' 
   import {useRoute} from 'vue-router' 
   import {collapseStore} from '@/store/collapse/index' //获取store
   const store=collapseStore()
