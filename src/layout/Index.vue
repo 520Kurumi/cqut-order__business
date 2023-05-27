@@ -40,6 +40,7 @@
     }
     .main {
     // background-color: darkcyan;
+      padding: 0;
     }
 
 }
