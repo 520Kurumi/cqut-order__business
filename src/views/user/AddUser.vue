@@ -54,7 +54,7 @@
 
             <el-col :span="12" :offset="0">
                 <el-form-item label="密码" prop="password">
-                      <el-input v-model="addModel.password"></el-input>
+                      <el-input type="password" v-model="addModel.password"></el-input>
                  </el-form-item>
             </el-col>
 
@@ -68,17 +68,33 @@
 </template>
 
 <script setup lang="ts">
+  import {addUserApi,deleteUserApi,editUserApi} from '@/api/user/index'
   import SysDialog from '@/components/SysDialog.vue'
   import useDialog from "@/hooks/useDialog";
-  import {reactive, ref} from 'vue'
-
+  import {reactive, ref, nextTick} from 'vue'
   import { UserModel } from "@/api/user/UserModel";
   import { FormInstance } from "element-plus";
+  import { EditType, Title } from "@/type/BaseType";
+  import { ElMessage } from 'element-plus';
+
+
   const { dialog, onClose, onConfirm, onShow } = useDialog();
-  const show=()=>{
+  const show=(type:string,row?:UserModel)=>{
+    //设置弹框的标题
+    type == EditType.ADD ? dialog.title = Title.ADD : dialog.title = Title.EDIT
     dialog.visible=true
     dialog.height=400
+
+    //传递了row，说明是编辑，
+    //编辑回显数据
+        if(row){
+            nextTick(()=>{
+            Object.assign(addModel,row)
+            })
+        }
     addFormRef.value?.resetFields()
+    addModel.type = type;
+    
   }
 
   const addFormRef = ref<FormInstance>();
@@ -97,6 +113,7 @@
     email: "",
     sex: "",
     name: "",
+    type:""
 });
 
 const rules = reactive({
@@ -137,11 +154,26 @@ const rules = reactive({
     ]
 });
 
+//注册事件
+const emists = defineEmits(['onFresh'])
+
 //表单提交
 const commit = ()=>{
-    addFormRef.value?.validate((valid: any)=>{
+    addFormRef.value?.validate(async(valid: any)=>{
         if(valid){
-         onClose()
+         let res; 
+           if(addModel.type==EditType.ADD){
+                res=await addUserApi(addModel)
+           }else{
+                res=await editUserApi(addModel)
+           }  
+
+          if(res && res.code==200){
+            ElMessage.success(res.msg)
+            emists('onFresh')
+            onClose()
+          }
+
         }
     })
 }

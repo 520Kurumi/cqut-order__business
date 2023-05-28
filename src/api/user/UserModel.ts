@@ -5,6 +5,7 @@ export type ListUserParm = {
     pageSize:number;
     name:string;
     phone:string;
+    total:number; //分页总条数
 }
 
 export type UserModel={
@@ -15,4 +16,5 @@ export type UserModel={
     email: string,
     sex: string,
     name: string,
+    type:string //区分新增还是编辑
 }

@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse,AxiosRequestHea
 import { ElMessage } from 'element-plus';
  //axios请求配置
 const config = {
-    baseURL: 'http://localhost:8089',
+    baseURL: '/api',
     timeout: 10000
 }
 class Http {
@@ -11,10 +11,10 @@ class Http {
     //构造函数里面初始化
 
     constructor(config: AxiosRequestConfig) {
-    this.instance = axios.create(config)
-    //定义拦截器
-    this.interceptors()
-}
+        this.instance = axios.create(config)
+        //定义拦截器
+        this.interceptors()
+    }
     //拦截器
 private interceptors() {
     //axios发送请求之前的处理
