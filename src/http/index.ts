@@ -139,6 +139,15 @@ private interceptors() {
     delete(url: string): Promise<any> {
      return this.instance.delete(url)
     }
+
+    //图片上传
+    upload(url: string, params?: object): Promise<any> {
+        return this.instance.post(url, params, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+    }
 }
 
 export default new Http(config)

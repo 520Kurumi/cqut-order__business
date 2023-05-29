@@ -12,3 +12,11 @@ export enum EditType {
     ADD = '0', //新增
     EDIT = '1' //编辑
 }
+
+//图片上传的数据类型
+export type NewType = {
+    NewImgUrl:Array<{url:string}>;
+    deleteUrl:Array<{url:string}>
+};
+
+

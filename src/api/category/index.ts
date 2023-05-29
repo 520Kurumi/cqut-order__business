@@ -20,3 +20,8 @@ export const editApi = (parm:CategoryModel)=>{
 export const deleteApi = (categoryId:string)=>{
     return http.delete(`/api/category/${categoryId}`)
 }
+
+//下拉列表
+export const getSelectApi = ()=>{
+    return http.get("/api/category/getSelectList")
+}

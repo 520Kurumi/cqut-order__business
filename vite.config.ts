@@ -26,6 +26,11 @@ export default defineConfig({
       ]
     },
     define:{
-      global:{}
+      // global:{},
+      'process.env': {
+        // 'BASE_API': "http://192.168.31.70:8089"
+        // 'BASE_API':"http://localhost:8089"
+        'BASE_API': "http://127.0.0.1:8089"
+        }
     }
 })

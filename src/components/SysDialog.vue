@@ -7,7 +7,7 @@
     :before-close="onClose"
     >
     <!-- 弹框的内容：插槽 -->
-    <div class="contanier" :style="{height:height+'px'}"> 
+    <div class="container" :style="{height:height+'px'}"> 
         <slot name="content"></slot>
     </div>
 
