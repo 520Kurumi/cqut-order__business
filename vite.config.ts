@@ -32,5 +32,8 @@ export default defineConfig({
         // 'BASE_API':"http://localhost:8089"
         'BASE_API': "http://127.0.0.1:8089"
         }
+    },
+    build:{
+      chunkSizeWarningLimit:1500
     }
 })

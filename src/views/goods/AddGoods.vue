@@ -153,7 +153,7 @@ import "@wangeditor/editor/dist/css/style.css"; // 引入 css
 import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 import useSelectCategory from "@/composables/goods/useSelectCategory";
 import UploadImage from "@/components/UploadImage.vue";
-import { reactive, ref, watch } from "vue";
+import { reactive, ref, watch ,nextTick} from "vue";
 import { GoodsType, SpecsType } from "@/api/goods/GoodsModel";
 import SysDialog from "@/components/SysDialog.vue";
 import useDialog from "@/hooks/useDialog";
@@ -161,7 +161,8 @@ import { ElMessage, FormInstance, UploadUserFile } from "element-plus";
 import { NewType } from "@/type/BaseType";
 import useEditor from "@/composables/goods/useEditor";
 import { Plus, Close } from "@element-plus/icons-vue";
-import {addApi} from '@/api/goods/index'
+import {addApi,editApi} from '@/api/goods/index'
+import {EditType} from '@/type/BaseType'
 //编辑器
 const {
   editorRef,
@@ -183,14 +184,58 @@ const imgUrl = ref<Array<{ url: string }>>([]);
 const { dialog, onClose, onConfirm, onShow } = useDialog();
 //下拉分类业务
 const { selectData, getSelect } = useSelectCategory();
+
+//注册事件
+const emits=defineEmits(['onfresh'])
 //显示弹框
-const show = () => {
+const show = (type:string,row?:GoodsType) => {
+    //清空图片
+  imgUrl.value = [];
+  oldUrl.value = [];
+  fileList.value = [];
+  //清空文本编辑器
+  if (editorRef.value) {
+     editorRef.value.clear();
+  }
   getSelect();
   dialog.width = 960;
   dialog.height = 560;
-  //设置默认的规格
-  addSpecs();
-  onShow();
+
+
+  if(type==EditType.EDIT&& row){
+      nextTick(()=>{
+        Object.assign(addModel,row)
+        if (addModel.goodsImage) {
+            //逗号分隔的字符串，转换为数组
+            let imgs = addModel.goodsImage.split(",");
+            for (let i = 0; i < imgs.length; i++) {
+                let img = {
+                    name: "",
+                    url: "",
+                };
+                img.name = imgs[i];
+                img.url = imgs[i];
+                fileList.value.push(img);
+                oldUrl.value.push({ url: imgs[i] });
+            }
+            }
+            //编辑器回显
+            valueHtml.value = addModel.goodsDesc;
+      })
+  }else{
+    nextTick(() => {
+        //清空规格
+        addModel.specs = [];
+        //设置默认的规格
+        addSpecs()
+      });
+  }
+     onShow();
+    addFormRef.value?.resetFields()
+
+    //设置本次操作是新增还是编辑
+      addModel.type = type;
+
 };
 //暴露出去给外部使用
 defineExpose({
@@ -346,9 +391,16 @@ const commit = () => {
   console.log(addModel);
   addFormRef.value?.validate(async(valid)=>{
     if(valid){
-      let res = await addApi(addModel)
+      let res;
+      if(addModel.type==EditType.ADD){
+        res = await addApi(addModel)
+      }else{
+        res=await editApi(addModel)
+      }
+      
       if(res && res.code == 200){
         ElMessage.success(res.msg)
+        emits('onfresh')
         onClose()
       }
     }

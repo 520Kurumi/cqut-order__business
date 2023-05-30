@@ -42,8 +42,8 @@
             </el-table-column>
             <el-table-column label="操作" width="200" align="center">
                 <template #default="scope">
-                    <el-button type="primary" :icon="Edit" size="default" @click="editBtn">编辑</el-button>
-                    <el-button type="danger" :icon="Delete" size="default" @click="deleteBtn">删除</el-button>
+                    <el-button type="primary" :icon="Edit" size="default" @click="editBtn(scope.row)">编辑</el-button>
+                    <el-button type="danger" :icon="Delete" size="default" @click="deleteBtn(scope.row)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -60,7 +60,7 @@
         
     </el-main>
     <!-- 新增编辑 -->
-    <AddGoods ref="addRef"></AddGoods>
+    <AddGoods ref="addRef" @onfresh="getList"></AddGoods>
 </template>
 
 <script setup lang="ts">
@@ -71,7 +71,7 @@ import useGoods from "@/composables/goods/useGoods";
 //表格业务
 const {tableList,getList,listParm,resetBtn,searchBtn,sizeChange,currentChange,tableHeight} = useGoodsTable()
 //新增业务
-const {addBtn,addRef,deleteBtn,editBtn} = useGoods()
+const {addBtn,addRef,deleteBtn,editBtn} = useGoods(getList)
 </script>
 
 <style scoped>
