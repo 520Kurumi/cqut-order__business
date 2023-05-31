@@ -1,20 +1,21 @@
 import http from "@/http";
-import { UserModel,ListUserParm } from "./UserModel";
+import { ListUserParm, UserModel } from "./UserModel";
 //新增
-export const addUserApi = (parm:UserModel)=>{
-    return http.post("/api/user",parm)
-}
-
-export const getListApi=(parm:ListUserParm)=>{
-    return http.get('/api/user/list',parm)
-}
-
+export const addUserApi = (parm: UserModel) => {
+  return http.post("/api/user", parm);
+};
+//列表
+export const getListApi = (parm: ListUserParm) => {
+  return http.get("/api/user/list", parm);
+};
 //编辑
-export const editUserApi = (parm:UserModel)=>{
-    return http.put("/api/user",parm)
-}
-
+export const editUserApi = (parm: UserModel) => {
+  return http.put("/api/user", parm);
+};
 //删除
-export const deleteUserApi = (userId:string)=>{
-    return http.delete(`/api/user/${userId}`)
-}
+export const deleteUserApi = (userId: string) => {
+  return http.delete(`/api/user/${userId}`);
+};
+export const loginUserApi = (user: any) => {
+  return http.post("/api/user/login", user);
+};

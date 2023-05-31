@@ -121,6 +121,7 @@
 
         <el-form-item prop="goodsImage" label="菜品图片">
           <UploadImage
+            ref="uploadImgs"
             @getImg="getImg"
             :oldUrl="oldUrl"
             :fileList="fileList"
@@ -153,16 +154,16 @@ import "@wangeditor/editor/dist/css/style.css"; // 引入 css
 import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 import useSelectCategory from "@/composables/goods/useSelectCategory";
 import UploadImage from "@/components/UploadImage.vue";
-import { reactive, ref, watch ,nextTick} from "vue";
+import { nextTick, reactive, ref, watch } from "vue";
 import { GoodsType, SpecsType } from "@/api/goods/GoodsModel";
 import SysDialog from "@/components/SysDialog.vue";
 import useDialog from "@/hooks/useDialog";
 import { ElMessage, FormInstance, UploadUserFile } from "element-plus";
-import { NewType } from "@/type/BaseType";
+import { EditType, NewType } from "@/type/BaseType";
 import useEditor from "@/composables/goods/useEditor";
 import { Plus, Close } from "@element-plus/icons-vue";
-import {addApi,editApi} from '@/api/goods/index'
-import {EditType} from '@/type/BaseType'
+import { addApi, editApi } from "@/api/goods/index";
+const uploadImgs = ref();
 //编辑器
 const {
   editorRef,
@@ -184,63 +185,6 @@ const imgUrl = ref<Array<{ url: string }>>([]);
 const { dialog, onClose, onConfirm, onShow } = useDialog();
 //下拉分类业务
 const { selectData, getSelect } = useSelectCategory();
-
-//注册事件
-const emits=defineEmits(['onfresh'])
-//显示弹框
-const show = (type:string,row?:GoodsType) => {
-    //清空图片
-  imgUrl.value = [];
-  oldUrl.value = [];
-  fileList.value = [];
-  //清空文本编辑器
-  if (editorRef.value) {
-     editorRef.value.clear();
-  }
-  getSelect();
-  dialog.width = 960;
-  dialog.height = 560;
-
-
-  if(type==EditType.EDIT&& row){
-      nextTick(()=>{
-        Object.assign(addModel,row)
-        if (addModel.goodsImage) {
-            //逗号分隔的字符串，转换为数组
-            let imgs = addModel.goodsImage.split(",");
-            for (let i = 0; i < imgs.length; i++) {
-                let img = {
-                    name: "",
-                    url: "",
-                };
-                img.name = imgs[i];
-                img.url = imgs[i];
-                fileList.value.push(img);
-                oldUrl.value.push({ url: imgs[i] });
-            }
-            }
-            //编辑器回显
-            valueHtml.value = addModel.goodsDesc;
-      })
-  }else{
-    nextTick(() => {
-        //清空规格
-        addModel.specs = [];
-        //设置默认的规格
-        addSpecs()
-      });
-  }
-     onShow();
-    addFormRef.value?.resetFields()
-
-    //设置本次操作是新增还是编辑
-      addModel.type = type;
-
-};
-//暴露出去给外部使用
-defineExpose({
-  show,
-});
 //表单绑定对象
 const addModel = reactive<GoodsType>({
   type: "",
@@ -254,6 +198,60 @@ const addModel = reactive<GoodsType>({
   orderNum: "",
   specs: [],
 });
+//显示弹框
+const show = (type: string, row?: GoodsType) => {
+  //清空图片
+  imgUrl.value = [];
+  oldUrl.value = [];
+  fileList.value = [];
+  //清空文本编辑器
+  if (editorRef.value) {
+    editorRef.value.clear();
+  }
+  getSelect();
+  dialog.width = 960;
+  dialog.height = 560;
+  //编辑回显
+  if (type == EditType.EDIT && row) {
+    nextTick(() => {
+      Object.assign(addModel, row);
+      //图片回显
+      if (addModel.goodsImage) {
+        //逗号分隔的字符串，转换为数组
+        let imgs = addModel.goodsImage.split(",");
+        for (let i = 0; i < imgs.length; i++) {
+          let img = {
+            name: "",
+            url: "",
+          };
+          img.name = imgs[i];
+          img.url = imgs[i];
+          fileList.value.push(img);
+          oldUrl.value.push({ url: imgs[i] });
+        }
+      }
+      //编辑器回显
+      valueHtml.value = addModel.goodsDesc;
+    });
+  } else {
+    nextTick(() => {
+      //清空规格
+      addModel.specs = [];
+      //设置默认的规格
+      addSpecs();
+    });
+  }
+  onShow();
+  //清空表单
+  addFormRef.value?.resetFields();
+  //设置本次操作是新增还是编辑
+  addModel.type = type;
+};
+//暴露出去给外部使用
+defineExpose({
+  show,
+});
+
 //菜品详情验证规则
 const checkEdit = (rule: any, value: any, callback: any) => {
   if (editorRef.value.getText().length == 0) {
@@ -386,25 +384,27 @@ const addSpecs = () => {
 const deleteSpecs = (num: number) => {
   addModel.specs.splice(num - 1, 1);
 };
+//注册事案
+const emits = defineEmits(["orRefsh"]);
 //提交表单
 const commit = () => {
-  console.log(addModel);
-  addFormRef.value?.validate(async(valid)=>{
-    if(valid){
-      let res;
-      if(addModel.type==EditType.ADD){
-        res = await addApi(addModel)
-      }else{
-        res=await editApi(addModel)
+  console.log(uploadImgs.value);
+  addFormRef.value?.validate(async (valid) => {
+    if (valid) {
+      let res = null;
+      if (addModel.type == EditType.ADD) {
+        res = await addApi(addModel);
+      } else {
+        res = await editApi(addModel);
       }
-      
-      if(res && res.code == 200){
-        ElMessage.success(res.msg)
-        emits('onfresh')
-        onClose()
+      if (res && res.code == 200) {
+        ElMessage.success(res.msg);
+        emits("orRefsh");
+        uploadImgs.value.clearimg();
+        onClose();
       }
     }
-  })
+  });
 };
 </script>
 

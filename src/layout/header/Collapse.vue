@@ -1,27 +1,24 @@
 <template>
-<el-icon :size="26" style="cursor: pointer;" @click="iconClick">
-     <component :is="status? Expand:Fold"></component>
-    </el-icon>
+  <el-icon style="cursor: pointer; color: #fff" :size="26" @click="iconClick">
+    <!-- 动态组件:有些场景会需要在两个组件间来回切换 -->
+    <component :is="status ? Expand : Fold"></component>
+  </el-icon>
 </template>
 
 <script setup lang="ts">
-   import {Expand} from '@element-plus/icons-vue'
-   import {Fold} from '@element-plus/icons-vue'
-   import {collapseStore} from '@/store/collapse/index'
-    import {computed} from 'vue'
-
-  const store=collapseStore()  //获取store
-  const status=computed(()=>{  //获取状态,初始化 
-    return store.getCollapse
-  })
-
- const iconClick=()=>{
-    store.setCollapse(!store.collapse)
- }
-
-
+import { collapseStore } from "@/store/collapse/index";
+import { Expand, Fold } from "@element-plus/icons-vue";
+import { computed } from "vue";
+//获取store
+const store = collapseStore();
+//获取状态
+const status = computed(() => {
+  return store.getCollapse;
+});
+//图标的点击事件
+const iconClick = () => {
+  store.setCollapse(!store.collapse);
+};
 </script>
 
-<style lang="scss" scoped>
-     
-</style>
+<style scoped></style>

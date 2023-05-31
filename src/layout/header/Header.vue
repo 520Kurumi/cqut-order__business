@@ -1,21 +1,20 @@
 <template>
-    <div class="left-header">
-     <Collapse></Collapse>
-     <BC></BC>
-    </div>
-      <LoginOut></LoginOut>   
+  <div class="left-header">
+    <Collapse></Collapse>
+    <BreadCrumb></BreadCrumb>
+  </div>
+  <LoginOut></LoginOut>
 </template>
 
-<script setup>
-  import Collapse from './Collapse.vue'
-  import LoginOut from './LoginOut.vue'
-   import BC from './BredCrumb.vue'
+<script setup lang="ts">
+import BreadCrumb from "./BreadCrumb.vue";
+import Collapse from "./Collapse.vue";
+import LoginOut from "./LoginOut.vue";
 </script>
 
-<style lang="scss" scoped>
-  .left-header{
-    display: flex;
-    align-items: center;//垂直居中
- 
-  }
+<style scoped>
+.left-header {
+  display: flex;
+  align-items: center;
+}
 </style>
