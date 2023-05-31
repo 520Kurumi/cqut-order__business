@@ -10,3 +10,7 @@ export const gePcOrdertListApi = (parm:OrderListParm)=>{
 export const sendOrderApi = (orderId:string)=>{
     return http.put("/wxapi/order/sendOrder",{orderId:orderId})
 }
+//统计
+export const getTotalApi = (type:string)=>{
+    return http.get("/wxapi/order/getTotal",{type:type})
+}

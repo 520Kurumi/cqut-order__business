@@ -24,3 +24,7 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 
 //全局注册
 app.config.globalProperties.$myconfirm = myConfirm
+
+//echarts
+import * as echarts from 'echarts'
+app.config.globalProperties.$echarts = echarts;
